@@ -5,26 +5,26 @@
 % jugar -> Despliega el menu para elegir el modo de juego, filas, columnas, elementos a conectar para ganar. También pregunta por que
 % tableros mostrar en los modos de juego en los que participa la IA. Una vez se tienen todos los datos, inicia el juego.
 jugar:-
-    gameMode(Player1, Player2, M),
+    game_mode(Player1, Player2, M),
     leer_entero(Rows, 1, '\u00bfCuantas filas va a tener el tablero?'),
-    tableColumns(C),
-    elementsConnected(R, C, E),
+    leer_entero(Cols, 1, '\u00bfCuantas filas va a tener el tablero?'),
+    elements_connected(Rows, Cols, E),
     (   
         (   
             M = 4,
-            showAllBoards(S),
-            game(R, C, E, Player1, Player2, _, S, true)
+            show_all_boards(S),
+            game(Rows, Cols, E, Player1, Player2, _, S, true)
         );
         (   
             M = 5,
-            simulationNumber(N),
-            showFinalBoards(S),
-            startSimulation(N, R, C, E, 0, 0, 0, S)
+            simulation_number(N),
+            show_final_boards(S),
+            start_simulation(N, Rows, Cols, E, 0, 0, 0, S)
         );
-        game(R, C, E, Player1, Player2, _, false, true)
+        game(Rows, Cols, E, Player1, Player2, _, false, true)
     ).
 
-gameColor().
+game_color().
 
 % players(Player1, Player2, M) -> Menu para elegir el modo de juego M
 % - Modo 1: 2 jugadores
@@ -32,7 +32,7 @@ gameColor().
 % - Modo 3: 1 jugador contra IA nivel dificil
 % - Modo 4: IA nivel facil contra IA nivel dificil (1 partida)
 % - Modo 5: IA nivel facil contra IA nivel dificil (N partidas)
-gameMode(Player1, Player2, M):-
+game_mode(Player1, Player2, M):-
     repeat,
     write_custom('Elige el modo de juego:'), nl,
     write_custom('1. Jugar contra otro jugador'), nl,
@@ -54,20 +54,20 @@ gameMode(Player1, Player2, M):-
             M = 2,
             consult('IAFacil'),
             Player1 = jugando,
-            Player2 = jugandoIAFacil
+            Player2 = jugando_IA_facil
         );
         (   
             M = 3,
             consult('IADificil'),
             Player1 = jugando,
-            Player2 = jugandoIADificil
+            Player2 = jugando_IA_dificil
         );
         (   
             M > 3,
             consult('IAFacil'),
             consult('IADificil'),
-            Player1 = jugandoIAFacil,
-            Player2 = jugandoIADificil
+            Player1 = jugando_IA_facil,
+            Player2 = jugando_IA_dificil
         )
     ).
 
@@ -75,8 +75,8 @@ gameMode(Player1, Player2, M):-
 tableColumns(C):-
     leer_entero(C, 1, '\u00bfCuantas columnas va a tener el tablero?').
 
-% elementsConnected(R,C,E) -> devuelve el numero de elementos a conectar para ganar en E
-elementsConnected(R,C,E):-
+% elements_connected(R,C,E) -> devuelve el numero de elementos a conectar para ganar en E
+elements_connected(R,C,E):-
     (
         R =< C,
         leer_entero(N, 1, R, '\u00bfCuantos elementos hay que conectar para ganar?')
@@ -86,46 +86,46 @@ elementsConnected(R,C,E):-
         leer_entero(N, 1, C, '\u00bfCuantos elementos hay que conectar para ganar?')
     ).
 
-% showAllBoards(B) -> devuelve un booleano (B) dependiendo de si se quiere mostrar o no el desarrollo de la partida
-showAllBoards(B):-
+% show_all_boards(B) -> devuelve un booleano (B) dependiendo de si se quiere mostrar o no el desarrollo de la partida
+show_all_boards(B):-
     leer_booleano(B, '\u00bfQuieres que se muestren los tableros del desarrollo de la partida?').
 
-% showFinalBoards(B) -> devuelve un booleano (B) dependiendo de si se quieren mostrar o no los tableros finales
-showFinalBoards(B):-
+% show_final_boards(B) -> devuelve un booleano (B) dependiendo de si se quieren mostrar o no los tableros finales
+show_final_boards(B):-
     leer_booleano(B, '\u00bfQuieres que se muestren los tableros finales?').
 
-% simulationNumber(S) -> devuelve el numero de simulaciones en S
-simulationNumber(S):-
+% simulation_number(S) -> devuelve el numero de simulaciones en S
+simulation_number(S):-
     repeat,
     write_custom('\u00bfCuantas simulaciones quieres realizar?'), nl,
     read(S),
     integer(S),
     0 < S.
 
-% startSimulation(N, R, C, E, WX, WO, Tie, ShowFinalBoards) -> Inicia una simulacion de N partidas entre la IA facil y la IA dificil
+% start_simulation(N, R, C, E, WX, WO, Tie, show_final_boards) -> Inicia una simulacion de N partidas entre la IA facil y la IA dificil
 % acumulando las victorias de cada una y los empates en distintos contadores para mostralos por pantalla una vez acaben.
-startSimulation(0, _, _, _, WX, WO, Tie, _):-
+start_simulation(0, _, _, _, WX, WO, Tie, _):-
     write_custom('Victorias IA facil: '), write_custom(WX), nl,
     write_custom('Victorias IA dificil: '), write_custom(WO), nl,
     write_custom('Empates: '), write_custom(Tie).
-startSimulation(N, R, C, E, WX, WO, Tie, ShowFinalBoards):-
-    game(R, C, E, jugandoIAFacil, jugandoIADificil, Winner, false, ShowFinalBoards),
+start_simulation(N, R, C, E, WX, WO, Tie, show_final_boards):-
+    game(R, C, E, jugando_IA_facil, jugando_IA_dificil, Winner, false, show_final_boards),
     N2 is N-1,
     (   
         (   
             Winner == 'X',
             WX2 is WX + 1,
-            startSimulation(N2, R, C, E, WX2, WO, Tie, ShowFinalBoards)
+            start_simulation(N2, R, C, E, WX2, WO, Tie, show_final_boards)
         );
         (   
             Winner == 'O',
             WO2 is WO + 1,
-            startSimulation(N2, R, C, E, WX, WO2, Tie, ShowFinalBoards)
+            start_simulation(N2, R, C, E, WX, WO2, Tie, show_final_boards)
         );
         (   
             Winner == 'Tie',
             Tie2 is Tie + 1,
-            startSimulation(N2, R, C, E, WX, WO, Tie2, ShowFinalBoards)
+            start_simulation(N2, R, C, E, WX, WO, Tie2, show_final_boards)
         )
     ).
 
