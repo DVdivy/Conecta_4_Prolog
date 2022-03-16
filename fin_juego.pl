@@ -13,7 +13,7 @@ win(E, [C|XS], N):-
 % winCol(E, X, N, NTot) -> Comprueba que el jugador E haya puesto N fichas en columna en el tablero X.
 winCol(_, _, 0, _).
 winCol(E, [Elem|CS], N, NTot):-
-    (   
+    (
         E = Elem,
         N2 is N-1,
         winCol(E, CS, N2, NTot),

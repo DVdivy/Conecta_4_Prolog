@@ -15,4 +15,3 @@ insertColumn([' ',X|CS], Elem, [Elem,X|CS]):-
     not(X = ' ').
 insertColumn([' ',' '|CS], Elem, [' '|C2]):-
     insertColumn([' '|CS], Elem, C2).
-

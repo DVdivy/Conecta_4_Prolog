@@ -1,35 +1,67 @@
-leer_entero(N, Li, Ls, Msg):-
-    repeat,
-    write_custom(Msg), nl,
-    read(N),
-    integer(N),
-    Li =< N,
-    N < Ls.
+%%%%%%%%%%%
+%% INPUT %%
+%%%%%%%%%%%
 
-leer_entero(N, Li, Msg):-
+% tableRows(R) -> devuelve el numero de filas en R
+tableRows(R):-
     repeat,
-    write_custom(Msg), nl,
-    read(N),
-    integer(N),
-    Li =< N.
+    write_ln('\u00bfCuantas filas va a tener el tablero?'),
+    read(R),
+    integer(R),
+    0 < R.
 
-% '\u00bfQuieres que se muestren los tableros del desarrollo de la partida?'
-leer_booleano(B, Msg):-
+% tableColumns(C) -> devuelve el numero de columnas en C
+tableColumns(C):-
     repeat,
-    write_custom(Msg), nl,
-    write_custom('1. Si'), nl,
-    write_custom('2. No'), nl,
+    write_ln('\u00bfCuantas columnas va a tener el tablero?'),
+    read(C),
+    integer(C),
+    0 < C.
+
+% elementsConnected(R,C,E) -> devuelve el numero de elementos a conectar para ganar en E
+elementsConnected(R, C, E):-
+    repeat,
+    write_ln('\u00bfCuantos elementos hay que conectar para ganar?'),
+    read(E),
+    integer(E),
+    0 < E,
+    E =< R,
+    E =< C.
+
+% showAllBoards(B) -> devuelve un booleano (B) dependiendo de si se quiere mostrar o no el desarrollo de la partida
+showAllBoards(S = 1):-
+    repeat,
+    write_ln('\u00bfQuieres que se muestren los tableros del desarrollo de la partida?'),
+    write_ln('1. Si'),
+    write_ln('2. No'),
     read(S),
     integer(S),
     0 < S,
-    S =< 2,
-    (   
-        (   
-            S = 1,
-            B = true
-        );
-        (   
-            S = 2,
-            B = false
-        )
-    ).
+    S =< 2.
+
+% showFinalBoards(B) -> devuelve un booleano (B) dependiendo de si se quieren mostrar o no los tableros finales
+showFinalBoards(S = 1):-
+    repeat,
+    write_ln('\u00bfQuieres que se muestren los tableros finales?'),
+    write_ln('1. Si'),
+    write_ln('2. No'),
+    read(S),
+    integer(S),
+    0 < S,
+    S =< 2.
+
+% simulationNumber(S) -> devuelve el numero de simulaciones en S
+simulationNumber(S):-
+    repeat,
+    write_ln('\u00bfCuantas simulaciones quieres realizar?'),
+    read(S),
+    integer(S),
+    0 < S.
+
+% readColumn(C) -> Lee la consola hasta que se introduzca un entero en el rango [1, Cols] y lo devuelve en C.
+readColumn(C, Cols):-
+    write('Column: '),
+    read(C),
+    integer(C),
+    1 =< C,
+    C =< Cols.

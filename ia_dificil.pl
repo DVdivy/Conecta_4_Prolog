@@ -6,41 +6,58 @@
 % que es el turno del Player (IA dificil), le pide a la IA donde introducir la siguiente ficha y le pasa el turno al Opponent
 % (NextTurn).
 jugandoIADificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard, ShowFinalBoard):- % Juega
-    (  
-        (   
+    (
+        (
             ShowBoard,
             show(X, Rows, Cols),
-            write_custom('Turno del jugador '),
-            write_custom(Player),
-            write_custom(' (IA dificil)'), nl,
+            write('Turno del jugador '),
+            (
+                (
+                    Player = 'X',
+                    ansi_format([fg(yellow)], '~w', 'O')
+                );
+                (
+                    Player = 'O',
+                    ansi_format([fg(red)], '~w', 'O')
+                )
+            ),
+            write_ln(' (IA dificil)'),
             nl
         );
         not(ShowBoard)
     ),
     playAIWin(X, Cols, Cols, N, X2, Player, Opponent),
-    (   
-        (   
+    (
+        (
             full(X2, Cols), % Empata
-            (   
-                (   
+            (
+                (
                     ShowFinalBoard,
                     show(X2, Rows, Cols),
-                    write_custom('Empate!')
-                    , nl
+                    write_ln('Empate!')
                 );
                 not(ShowFinalBoard)
-            )
+            ),
+            Winner = 'Tie'
         );
-        (   
+        (
             win(Player, X2, N), % Gana
-            (   
-                (   
+            (
+                (
                     ShowFinalBoard,
                     show(X2, Rows, Cols),
-                    write_custom('El jugador '),
-                    writePlayer(Player),
-                    write_custom(' (IA dificil) ha ganado!')
-                    , nl
+                    write('El jugador '),
+                    (
+                        (
+                            Player = 'X',
+                            ansi_format([fg(yellow)], '~w', 'O')
+                        );
+                        (
+                            Player = 'O',
+                            ansi_format([fg(red)], '~w', 'O')
+                        )
+                    ),
+                    write_ln(' (IA dificil) ha ganado!')
                 );
                 not(ShowFinalBoard)
             ),
@@ -54,11 +71,11 @@ jugandoIADificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard
 playAIWin(X, Cols, 0, N, X2, Player, Opponent) :-
     playAIAvoid(X, Cols, Cols, N, X2, Player, Opponent).
 playAIWin(X, Cols, Column, N, X2, Player, Opponent):- 
-    (   
+    (
         insert(X, Column, Player, X2),
         win(Player, X2, N)
     );
-    (   
+    (
         Column2 is Column - 1,
         playAIWin(X, Cols, Column2, N, X2, Player, Opponent)
     ).
@@ -69,12 +86,12 @@ playAIAvoid(X, Cols, 0, N, X2, Player, Opponent):-
     playAIWontLose(X, Cols, Cols, N, X2, Player, Opponent, L),
     playAIRandom(X, Cols, X2, Player, L).
 playAIAvoid(X, Cols, Column, N, X2, Player, Opponent):- 
-    (   
+    (
         insert(X, Column, Opponent, X3),
         win(Opponent, X3, N),
         insert(X, Column, Player, X2)
     );
-    (   
+    (
         Column2 is Column - 1,
         playAIAvoid(X, Cols, Column2, N, X2, Player, Opponent)
     ).
@@ -85,14 +102,14 @@ playAIWontLose(_, _, 0, _, _, _, _, []).
 playAIWontLose(X, Cols, Column, N, X2, Player, Opponent, L):-
     Column2 is Column - 1,
     playAIWontLose(X, Cols, Column2, N, X2, Player, Opponent, LS),
-    (   
-        (   
+    (
+        (
             insert(X, Column, Player, X3),
             insert(X3, Column, Opponent, X4),
             not(win(Opponent, X4, N)),
             L = [Column|LS]
         );
-        (   
+        (
             insert(X, Column, Player, X3),
             nth1(Column, X3, C3),
             fullColumn(C3),
@@ -105,14 +122,14 @@ playAIWontLose(X, Cols, Column, N, X2, Player, Opponent, L):-
 % L o, si pierde en cualquier posicion, en cualquier posicion.
 playAIRandom(X, Cols, X2, Player, L):-
     length(L, Len),
-    (  
-        (   
+    (
+        (
             Len = 0,
             repeat,
             random_between(1, Cols, R),
             insert(X, R, Player, X2)
         );
-        (   
+        (
             repeat,
             random_member(R, L),      
             insert(X, R, Player, X2)
