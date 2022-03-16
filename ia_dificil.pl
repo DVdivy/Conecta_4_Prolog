@@ -2,10 +2,10 @@
 %% AI HARD %%
 %%%%%%%%%%%%%
 
-% jugandoIADificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard, ShowFinalBoard) -> Imprime el tablero X, indica
+% jugando_IA_dificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard, ShowFinalBoard) -> Imprime el tablero X, indica
 % que es el turno del Player (IA dificil), le pide a la IA donde introducir la siguiente ficha y le pasa el turno al Opponent
 % (NextTurn).
-jugandoIADificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard, ShowFinalBoard):- % Juega
+jugando_IA_dificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard, ShowFinalBoard):- % Juega
     (  
         (   
             ShowBoard,
@@ -17,7 +17,7 @@ jugandoIADificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard
         );
         not(ShowBoard)
     ),
-    playAIWin(X, Cols, Cols, N, X2, Player, Opponent),
+    play_AI_win(X, Cols, Cols, N, X2, Player, Opponent),
     (   
         (   
             full(X2, Cols), % Empata
@@ -38,7 +38,7 @@ jugandoIADificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard
                     ShowFinalBoard,
                     show(X2, Rows, Cols),
                     write_custom('El jugador '),
-                    writePlayer(Player),
+                    write_custom(Player),
                     write_custom(' (IA dificil) ha ganado!')
                     , nl
                 );
@@ -46,29 +46,29 @@ jugandoIADificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard
             ),
             Winner = Player
         );
-        call(NextTurn, X2, Opponent, Rows, Cols, N, Player, jugandoIADificil, Winner, ShowBoard, ShowFinalBoard) % Continua
+        call(NextTurn, X2, Opponent, Rows, Cols, N, Player, jugando_IA_dificil, Winner, ShowBoard, ShowFinalBoard) % Continua
     ).
 
-% playAIWin(X, Cols, Column, N, X2, Player, Opponent) -> Si la IA (Player) puede ganar, lo hace. Si no, pasa a intentar evitar
+% play_AI_win(X, Cols, Column, N, X2, Player, Opponent) -> Si la IA (Player) puede ganar, lo hace. Si no, pasa a intentar evitar
 % que el otro (Opponent) gane.
-playAIWin(X, Cols, 0, N, X2, Player, Opponent) :-
-    playAIAvoid(X, Cols, Cols, N, X2, Player, Opponent).
-playAIWin(X, Cols, Column, N, X2, Player, Opponent):- 
+play_AI_win(X, Cols, 0, N, X2, Player, Opponent) :-
+    play_AI_avoid(X, Cols, Cols, N, X2, Player, Opponent).
+play_AI_win(X, Cols, Column, N, X2, Player, Opponent):- 
     (   
         insert(X, Column, Player, X2),
         win(Player, X2, N)
     );
     (   
         Column2 is Column - 1,
-        playAIWin(X, Cols, Column2, N, X2, Player, Opponent)
+        play_AI_win(X, Cols, Column2, N, X2, Player, Opponent)
     ).
 
-% playAIAvoid(X, Cols, Column, N, X2, Player, Opponent) -> Si Player puede evitar que Opponent gane, lo hace. Si no, pone
+% play_AI_avoid(X, Cols, Column, N, X2, Player, Opponent) -> Si Player puede evitar que Opponent gane, lo hace. Si no, pone
 % ficha aleatoriamente
-playAIAvoid(X, Cols, 0, N, X2, Player, Opponent):-
-    playAIWontLose(X, Cols, Cols, N, X2, Player, Opponent, L),
-    playAIRandom(X, Cols, X2, Player, L).
-playAIAvoid(X, Cols, Column, N, X2, Player, Opponent):- 
+play_AI_avoid(X, Cols, 0, N, X2, Player, Opponent):-
+    play_AI_wont_lose(X, Cols, Cols, N, X2, Player, Opponent, L),
+    play_AI_random(X, Cols, X2, Player, L).
+play_AI_avoid(X, Cols, Column, N, X2, Player, Opponent):- 
     (   
         insert(X, Column, Opponent, X3),
         win(Opponent, X3, N),
@@ -76,15 +76,15 @@ playAIAvoid(X, Cols, Column, N, X2, Player, Opponent):-
     );
     (   
         Column2 is Column - 1,
-        playAIAvoid(X, Cols, Column2, N, X2, Player, Opponent)
+        play_AI_avoid(X, Cols, Column2, N, X2, Player, Opponent)
     ).
 
-% playAIWontLose(X, Cols, Column, N, X2, Player, Opponent, L) -> Player busca en que columnas puede jugar sin perder y las va
+% play_AI_wont_lose(X, Cols, Column, N, X2, Player, Opponent, L) -> Player busca en que columnas puede jugar sin perder y las va
 % guardando en la lista L.
-playAIWontLose(_, _, 0, _, _, _, _, []).
-playAIWontLose(X, Cols, Column, N, X2, Player, Opponent, L):-
+play_AI_wont_lose(_, _, 0, _, _, _, _, []).
+play_AI_wont_lose(X, Cols, Column, N, X2, Player, Opponent, L):-
     Column2 is Column - 1,
-    playAIWontLose(X, Cols, Column2, N, X2, Player, Opponent, LS),
+    play_AI_wont_lose(X, Cols, Column2, N, X2, Player, Opponent, LS),
     (   
         (   
             insert(X, Column, Player, X3),
@@ -95,15 +95,15 @@ playAIWontLose(X, Cols, Column, N, X2, Player, Opponent, L):-
         (   
             insert(X, Column, Player, X3),
             nth1(Column, X3, C3),
-            fullColumn(C3),
+            full_column(C3),
             L = [Column|LS]
         );
         L = LS
     ).
 
-% playAIRandom(X, Cols, X2, Player, L) -> Player inserta una ficha aleatoriamente en las posiciones en las que no va a perder
+% play_AI_random(X, Cols, X2, Player, L) -> Player inserta una ficha aleatoriamente en las posiciones en las que no va a perder
 % L o, si pierde en cualquier posicion, en cualquier posicion.
-playAIRandom(X, Cols, X2, Player, L):-
+play_AI_random(X, Cols, X2, Player, L):-
     length(L, Len),
     (  
         (   
