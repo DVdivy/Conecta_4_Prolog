@@ -37,7 +37,7 @@ showLine([[X|X2]|XS], [X2|XS2], Cols, ColCurr):-
     (
         (
             X = 'X',
-            ansi_format([fg(yellow)], '~w', 'O')
+            ansi_format([fg(yellow)], '~w', 'X')
         );
         (
             X = 'O',

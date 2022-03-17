@@ -134,7 +134,7 @@ jugando(X, Player, Rows, Cols, N, Opponent, NextTurn, _, ShowBoard, ShowFinalBoa
     (
         (
             Player = 'X',
-            ansi_format([fg(yellow)], '~w', 'O')
+            ansi_format([fg(yellow)], '~w', 'X')
         );
         (
             Player = 'O',
@@ -159,7 +159,7 @@ jugando(X, Player, Rows, Cols, N, Opponent, NextTurn, _, ShowBoard, ShowFinalBoa
             (
                 (
                     Player = 'X',
-                    ansi_format([fg(yellow)], '~w', 'O')
+                    ansi_format([fg(yellow)], '~w', 'X')
                 );
                 (
                     Player = 'O',

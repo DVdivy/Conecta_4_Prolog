@@ -14,7 +14,7 @@ jugandoIADificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard
             (
                 (
                     Player = 'X',
-                    ansi_format([fg(yellow)], '~w', 'O')
+                    ansi_format([fg(yellow)], '~w', 'X')
                 );
                 (
                     Player = 'O',
@@ -50,7 +50,7 @@ jugandoIADificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard
                     (
                         (
                             Player = 'X',
-                            ansi_format([fg(yellow)], '~w', 'O')
+                            ansi_format([fg(yellow)], '~w', 'X')
                         );
                         (
                             Player = 'O',
