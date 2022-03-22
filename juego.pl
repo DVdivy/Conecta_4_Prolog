@@ -148,11 +148,6 @@ jugando(X, Player, Rows, Cols, N, Opponent, NextTurn, _, ShowBoard, ShowFinalBoa
     nl,
     (
         (
-            full(X2, Cols), % Empata
-            show(X2, Rows, Cols),
-            write_ln('Empate!')
-        );
-        (
             win(Player, X2, N), % Gana
             show(X2, Rows, Cols),
             write('El jugador '),
@@ -167,6 +162,11 @@ jugando(X, Player, Rows, Cols, N, Opponent, NextTurn, _, ShowBoard, ShowFinalBoa
                 )
             ),
             write_ln(' ha ganado!')
+        );
+        (
+            full(X2, Cols), % Empata
+            show(X2, Rows, Cols),
+            write_ln('Empate!')
         );
         call(NextTurn, X2, Opponent, Rows, Cols, N, Player, jugando, _, ShowBoard, ShowFinalBoard) % Continua
     ).

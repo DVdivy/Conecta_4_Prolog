@@ -31,18 +31,6 @@ jugandoIAFacil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard, 
     insert(X, R, Player, X2),
     (
         (
-            full(X2, Cols), % Empata
-            (
-                (
-                    ShowFinalBoard,
-                    show(X2, Rows, Cols),
-                    write_ln('Empate!')
-                );
-                not(ShowFinalBoard)
-            ),
-            Winner = 'Tie'
-        );
-        (
             win(Player, X2, N), % Gana
             (
                 (
@@ -64,6 +52,18 @@ jugandoIAFacil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard, 
                 not(ShowFinalBoard)
             ),
             Winner = Player
+        );
+        (
+            full(X2, Cols), % Empata
+            (
+                (
+                    ShowFinalBoard,
+                    show(X2, Rows, Cols),
+                    write_ln('Empate!')
+                );
+                not(ShowFinalBoard)
+            ),
+            Winner = 'Tie'
         );
         call(NextTurn, X2, Opponent, Rows, Cols, N, Player, jugandoIAFacil, Winner, ShowBoard, ShowFinalBoard) % Continua
     ).

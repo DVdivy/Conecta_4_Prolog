@@ -29,18 +29,6 @@ jugandoIADificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard
     playAIWin(X, Cols, Cols, N, X2, Player, Opponent),
     (
         (
-            full(X2, Cols), % Empata
-            (
-                (
-                    ShowFinalBoard,
-                    show(X2, Rows, Cols),
-                    write_ln('Empate!')
-                );
-                not(ShowFinalBoard)
-            ),
-            Winner = 'Tie'
-        );
-        (
             win(Player, X2, N), % Gana
             (
                 (
@@ -62,6 +50,18 @@ jugandoIADificil(X, Player, Rows, Cols, N, Opponent, NextTurn, Winner, ShowBoard
                 not(ShowFinalBoard)
             ),
             Winner = Player
+        );
+        (
+            full(X2, Cols), % Empata
+            (
+                (
+                    ShowFinalBoard,
+                    show(X2, Rows, Cols),
+                    write_ln('Empate!')
+                );
+                not(ShowFinalBoard)
+            ),
+            Winner = 'Tie'
         );
         call(NextTurn, X2, Opponent, Rows, Cols, N, Player, jugandoIADificil, Winner, ShowBoard, ShowFinalBoard) % Continua
     ).
