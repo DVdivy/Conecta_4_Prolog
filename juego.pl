@@ -45,46 +45,6 @@ jugar:-
         game(R, C, E, Player1, Player2, _, false, true)
     ).
 
-% players(Player1, Player2, M) -> Menu para elegir el modo de juego M.
-gameMode(Player1, Player2, M):-
-    repeat,
-    write_ln('Elige el modo de juego:'),
-    write_ln('1. Jugar contra otro jugador'),
-    write_ln('2. Jugar contra un bot (Facil)'),
-    write_ln('3. Jugar contra un bot (Dificil)'),
-    write_ln('4. Enfrentar bots (Facil Vs. Dificil)'),
-    write_ln('5. Enfrentar bots (Estadisticas)'),
-    read(M),
-    integer(M),
-    0 < M,
-    M < 6,
-    (
-        (
-            M = 1,
-            Player1 = jugando,
-            Player2 = jugando
-        );
-        (
-            M = 2,
-            Player1 = jugando,
-            Player2 = jugandoIAFacil,
-            consult('ia_facil.pl')
-        );
-        (
-            M = 3,
-            Player1 = jugando,
-            Player2 = jugandoIADificil,
-            consult('ia_dificil.pl')
-        );
-        (
-            M > 3,
-            Player1 = jugandoIAFacil,
-            Player2 = jugandoIADificil,
-            consult('ia_facil.pl'),
-            consult('ia_dificil.pl')
-        )
-    ).
-
 % startSimulation(N, R, C, E, WX, WO, Tie, ShowFinalBoards) -> Inicia una simulacion de N partidas entre la IA facil y la IA dificil
 % acumulando las victorias de cada una y los empates en distintos contadores para mostralos por pantalla una vez acaben.
 startSimulation(0, _, _, _, WX, WO, Tie, _):-
